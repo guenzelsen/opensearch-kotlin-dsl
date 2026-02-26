@@ -107,4 +107,24 @@ class OpenSearchDslTest {
         assertTrue(boolQuery.should()[0].isNested)
         assertEquals("comments", boolQuery.should()[0].nested().path())
     }
+
+    @Test
+    fun `test simple query string query`() {
+        val q: Query = query {
+            simpleQueryString("test query", listOf("title", "content"))
+        }
+        assertTrue(q.isSimpleQueryString)
+        assertEquals("test query", q.simpleQueryString().query())
+        assertEquals(listOf("title", "content"), q.simpleQueryString().fields())
+    }
+
+    @Test
+    fun `test wildcard query`() {
+        val q: Query = query {
+            wildcard("status", "act*")
+        }
+        assertTrue(q.isWildcard)
+        assertEquals("status", q.wildcard().field())
+        assertEquals("act*", q.wildcard().value())
+    }
 }

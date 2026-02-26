@@ -13,6 +13,8 @@ This library provides a type-safe builder for constructing OpenSearch queries cl
 - `terms`
 - `nested`
 - `bool` (`must`, `should`, `filter`, `mustNot`)
+- `simple_query_string`
+- `wildcard`
 
 ## Usage
 
