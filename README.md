@@ -3,6 +3,10 @@
 A lightweight, idiomatic Kotlin DSL wrapper for the `opensearch-java` client.
 This library provides a type-safe builder for constructing OpenSearch queries cleanly without deep nesting or cumbersome Java builder syntax.
 
+**Compatibility:**
+- Kotlin `2.3.10`
+- OpenSearch Java Client `3.6.0`
+
 ## Features Supported
 - `match`
 - `term`
@@ -22,6 +26,17 @@ val searchContextQuery = query {
         }
         filter {
             term("status", "published")
+            terms("tags", listOf("search", "database"))
+        }
+        mustNot {
+            term("author", "anonymous")
+        }
+        should {
+            nested("comments") {
+                query {
+                    match("comments.text", "great")
+                }
+            }
         }
     }
 }
