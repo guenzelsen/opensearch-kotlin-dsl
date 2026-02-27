@@ -180,4 +180,30 @@ class OpenSearchDslTest {
         assertTrue(parentQuery.isTerm)
         assertEquals("engineering", parentQuery.term().value().stringValue())
     }
+
+    @Test
+    fun `test match all query`() {
+        val q: Query = query {
+            matchAll()
+        }
+        assertTrue(q.isMatchAll)
+    }
+
+    @Test
+    fun `test minimum should match in bool query`() {
+        val q: Query = query {
+            bool {
+                minimumShouldMatch = "2"
+                should {
+                    term("tag", "kotlin")
+                    term("tag", "java")
+                    term("tag", "opensearch")
+                }
+            }
+        }
+        assertTrue(q.isBool)
+        val boolQuery = q.bool()
+        assertEquals("2", boolQuery.minimumShouldMatch())
+        assertEquals(3, boolQuery.should().size)
+    }
 }
