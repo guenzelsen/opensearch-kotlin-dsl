@@ -127,4 +127,57 @@ class OpenSearchDslTest {
         assertEquals("status", q.wildcard().field())
         assertEquals("act*", q.wildcard().value())
     }
+
+    @Test
+    fun `test has child query`() {
+        val q: Query = query {
+            hasChild("employees") {
+                query {
+                    match("role", "developer")
+                }
+            }
+        }
+        assertTrue(q.isHasChild)
+        assertEquals("employees", q.hasChild().type())
+        
+        val childQuery = q.hasChild().query()
+        assertTrue(childQuery.isMatch)
+        assertEquals("developer", childQuery.match().query().stringValue())
+    }
+
+    @Test
+    fun `test has child boolean query`() {
+        val q: Query = query {
+            bool {
+                must {
+                    hasChild("comments") {
+                        query {
+                            term("author", "admin")
+                        }
+                    }
+                }
+            }
+        }
+        assertTrue(q.isBool)
+        val mustClauses = q.bool().must()
+        assertEquals(1, mustClauses.size)
+        assertTrue(mustClauses[0].isHasChild)
+    }
+
+    @Test
+    fun `test has parent query`() {
+        val q: Query = query {
+            hasParent("company") {
+                query {
+                    term("department", "engineering")
+                }
+            }
+        }
+        assertTrue(q.isHasParent)
+        assertEquals("company", q.hasParent().parentType())
+        
+        val parentQuery = q.hasParent().query()
+        assertTrue(parentQuery.isTerm)
+        assertEquals("engineering", parentQuery.term().value().stringValue())
+    }
 }
