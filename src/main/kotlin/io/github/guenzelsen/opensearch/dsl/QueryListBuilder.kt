@@ -6,6 +6,8 @@ import org.opensearch.client.opensearch._types.query_dsl.TermQuery
 import org.opensearch.client.opensearch._types.query_dsl.TermsQuery
 import org.opensearch.client.opensearch._types.query_dsl.SimpleQueryStringQuery
 import org.opensearch.client.opensearch._types.query_dsl.WildcardQuery
+import org.opensearch.client.opensearch._types.query_dsl.HasChildQuery
+import org.opensearch.client.opensearch._types.query_dsl.HasParentQuery
 import org.opensearch.client.opensearch._types.FieldValue
 
 /**
@@ -161,6 +163,30 @@ class QueryListBuilder {
         val builder = WildcardQuery.Builder().field(field).value(value)
         builder.block()
         queries.add(Query.of { q -> q.wildcard(builder.build()) })
+    }
+
+    /**
+     * Constructs and adds a `has_child` query to query child objects.
+     *
+     * @param type The child type to query against.
+     * @param block Block to define the child query structure.
+     */
+    fun hasChild(type: String, block: HasChildQueryBuilder.() -> Unit) {
+        val builder = HasChildQueryBuilder(type)
+        builder.block()
+        queries.add(Query.of { q -> q.hasChild(builder.build()) })
+    }
+
+    /**
+     * Constructs and adds a `has_parent` query to query parent objects.
+     *
+     * @param parentType The parent type to query against.
+     * @param block Block to define the parent query structure.
+     */
+    fun hasParent(parentType: String, block: HasParentQueryBuilder.() -> Unit) {
+        val builder = HasParentQueryBuilder(parentType)
+        builder.block()
+        queries.add(Query.of { q -> q.hasParent(builder.build()) })
     }
 
     internal fun build(): List<Query> = queries
