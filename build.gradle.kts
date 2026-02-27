@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.opensearch.client:opensearch-java:3.3.0")
+    implementation("org.opensearch.client:opensearch-java:3.6.0")
 
     testImplementation(kotlin("test"))
 }
