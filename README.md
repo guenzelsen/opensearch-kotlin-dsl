@@ -15,6 +15,9 @@ This library provides a type-safe builder for constructing OpenSearch queries cl
 - `bool` (`must`, `should`, `filter`, `mustNot`)
 - `simple_query_string`
 - `wildcard`
+- `has_child`
+- `has_parent`
+- `match_all`
 
 ## Usage
 
@@ -25,6 +28,7 @@ val searchContextQuery = query {
     bool {
         must {
             match("title", "Kotlin DSL")
+            matchAll()
         }
         filter {
             term("status", "published")
@@ -37,6 +41,16 @@ val searchContextQuery = query {
             nested("comments") {
                 query {
                     match("comments.text", "great")
+                }
+            }
+            hasChild("author") {
+                query {
+                    term("name", "John")
+                }
+            }
+            hasParent("blog_post") {
+                query {
+                    match("title", "OpenSearch")
                 }
             }
         }
