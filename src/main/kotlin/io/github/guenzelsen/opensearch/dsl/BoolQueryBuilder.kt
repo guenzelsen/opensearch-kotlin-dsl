@@ -16,6 +16,12 @@ class BoolQueryBuilder {
     private val shouldQueries = mutableListOf<Query>()
     private val mustNotQueries = mutableListOf<Query>()
     private val filterQueries = mutableListOf<Query>()
+    
+    /**
+     * Optional `minimum_should_match` parameter allowing flexibility 
+     * in the number of `should` clauses to match.
+     */
+    var minimumShouldMatch: String? = null
 
     /**
      * Adds a `must` clause. Queries defined here must appear in matching documents 
@@ -71,6 +77,7 @@ class BoolQueryBuilder {
         if (shouldQueries.isNotEmpty()) builder.should(shouldQueries)
         if (mustNotQueries.isNotEmpty()) builder.mustNot(mustNotQueries)
         if (filterQueries.isNotEmpty()) builder.filter(filterQueries)
+        if (minimumShouldMatch != null) builder.minimumShouldMatch(minimumShouldMatch)
         return builder.build()
     }
 }

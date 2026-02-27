@@ -46,3 +46,6 @@ bin/
 
 ### Custom ###
 error.log
+
+### Agents ###
+.agents

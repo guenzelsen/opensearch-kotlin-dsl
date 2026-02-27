@@ -9,6 +9,7 @@ import org.opensearch.client.opensearch._types.query_dsl.SimpleQueryStringQuery
 import org.opensearch.client.opensearch._types.query_dsl.WildcardQuery
 import org.opensearch.client.opensearch._types.query_dsl.HasChildQuery
 import org.opensearch.client.opensearch._types.query_dsl.HasParentQuery
+import org.opensearch.client.opensearch._types.query_dsl.MatchAllQuery
 import org.opensearch.client.opensearch._types.FieldValue
 
 /**
@@ -195,6 +196,17 @@ class QueryBuilder {
         val builder = HasParentQueryBuilder(parentType)
         builder.block()
         setQuery(Query.of { q -> q.hasParent(builder.build()) })
+    }
+
+    /**
+     * Constructs a `match_all` query.
+     *
+     * @param block Optional configuration block.
+     */
+    fun matchAll(block: MatchAllQuery.Builder.() -> Unit = {}) {
+        val builder = MatchAllQuery.Builder()
+        builder.block()
+        setQuery(Query.of { q -> q.matchAll(builder.build()) })
     }
 
     internal fun build(): Query {
