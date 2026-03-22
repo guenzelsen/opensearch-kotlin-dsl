@@ -206,4 +206,24 @@ class OpenSearchDslTest {
         assertEquals("2", boolQuery.minimumShouldMatch())
         assertEquals(3, boolQuery.should().size)
     }
+    @Test
+    fun `test exists query`() {
+        val q: Query = query {
+            exists("status")
+        }
+        assertTrue(q.isExists)
+        assertEquals("status", q.exists().field())
+    }
+
+    @Test
+    fun `test ids query`() {
+        val q: Query = query {
+            ids(listOf("1", "2"))
+        }
+        assertTrue(q.isIds)
+        val values = q.ids().values()
+        assertEquals(2, values.size)
+        assertEquals("1", values[0])
+        assertEquals("2", values[1])
+    }
 }

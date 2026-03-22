@@ -10,6 +10,8 @@ import org.opensearch.client.opensearch._types.query_dsl.WildcardQuery
 import org.opensearch.client.opensearch._types.query_dsl.HasChildQuery
 import org.opensearch.client.opensearch._types.query_dsl.HasParentQuery
 import org.opensearch.client.opensearch._types.query_dsl.MatchAllQuery
+import org.opensearch.client.opensearch._types.query_dsl.ExistsQuery
+import org.opensearch.client.opensearch._types.query_dsl.IdsQuery
 import org.opensearch.client.opensearch._types.FieldValue
 
 /**
@@ -207,6 +209,30 @@ class QueryBuilder {
         val builder = MatchAllQuery.Builder()
         builder.block()
         setQuery(Query.of { q -> q.matchAll(builder.build()) })
+    }
+
+    /**
+     * Constructs an `exists` query.
+     *
+     * @param field The field to check for existence.
+     * @param block Optional configuration block.
+     */
+    fun exists(field: String, block: ExistsQuery.Builder.() -> Unit = {}) {
+        val builder = ExistsQuery.Builder().field(field)
+        builder.block()
+        setQuery(Query.of { q -> q.exists(builder.build()) })
+    }
+
+    /**
+     * Constructs an `ids` query.
+     *
+     * @param values The list of string IDs to match.
+     * @param block Optional configuration block.
+     */
+    fun ids(values: List<String>, block: IdsQuery.Builder.() -> Unit = {}) {
+        val builder = IdsQuery.Builder().values(values)
+        builder.block()
+        setQuery(Query.of { q -> q.ids(builder.build()) })
     }
 
     internal fun build(): Query {
