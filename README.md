@@ -8,6 +8,8 @@ This library provides a type-safe builder for constructing OpenSearch queries cl
 - OpenSearch Java Client `3.6.0`
 
 ## Features Supported
+
+### Queries
 - `match`
 - `term`
 - `terms`
@@ -21,11 +23,20 @@ This library provides a type-safe builder for constructing OpenSearch queries cl
 - `exists`
 - `ids`
 
+### Aggregations
+- `terms`
+- `min`
+- `max`
+- `avg`
+- `sum`
+
 ## Usage
 
 ```kotlin
 import io.github.guenzelsen.opensearch.dsl.query
+import io.github.guenzelsen.opensearch.dsl.aggregations
 
+// 1. Building a Query
 val searchContextQuery = query {
     bool {
         must {
@@ -59,6 +70,13 @@ val searchContextQuery = query {
             }
         }
     }
+}
+
+// 2. Building Aggregations
+val searchAggregations = aggregations {
+    terms("popular_tags", "tags")
+    avg("average_score", "score")
+    max("max_price", "price")
 }
 ```
 
