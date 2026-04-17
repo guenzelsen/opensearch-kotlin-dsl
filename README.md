@@ -18,6 +18,8 @@ This library provides a type-safe builder for constructing OpenSearch queries cl
 - `has_child`
 - `has_parent`
 - `match_all`
+- `exists`
+- `ids`
 
 ## Usage
 
@@ -38,6 +40,8 @@ val searchContextQuery = query {
             term("author", "anonymous")
         }
         should {
+            exists("deleted_at")
+            ids(listOf("101", "102"))
             nested("comments") {
                 query {
                     match("comments.text", "great")
